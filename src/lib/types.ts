@@ -11,6 +11,18 @@ export const CURRENCIES: { code: Currency; symbol: string; label: string }[] = [
 
 export type TransactionType = "income" | "expense";
 export type Role = "user" | "admin";
+export type BillingPeriod = "weekly" | "monthly" | "yearly";
+
+export const BILLING_PERIODS: {
+  value: BillingPeriod;
+  label: string;
+  suffix: string;
+  perMonth: number; // aylık yüke çevirme katsayısı
+}[] = [
+  { value: "weekly", label: "Haftalık", suffix: "hafta", perMonth: 52 / 12 },
+  { value: "monthly", label: "Aylık", suffix: "ay", perMonth: 1 },
+  { value: "yearly", label: "Yıllık", suffix: "yıl", perMonth: 1 / 12 },
+];
 
 export interface Profile {
   id: string;
@@ -39,7 +51,9 @@ export interface Subscription {
   name: string;
   amount: number;
   currency: Currency;
-  billing_day: number;
+  billing_day: number | null;
+  billing_period: BillingPeriod;
+  next_billing_on: string;
   is_active: boolean;
   last_billed_on: string | null;
   created_at: string;
