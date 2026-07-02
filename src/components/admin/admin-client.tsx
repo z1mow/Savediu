@@ -83,7 +83,7 @@ function StatGrid({ stats }: { stats: Stats }) {
         maximumFractionDigits: 1,
       }).format(stats.totalVolume),
       icon: BadgeDollarSign,
-      accent: "text-emerald-500 bg-emerald-500/10",
+      accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
     },
     {
       title: "Aktif Abonelik",
@@ -183,7 +183,7 @@ function UsersTable({
                   <TableCell className="pl-6">
                     <div className="flex items-center gap-3">
                       <Avatar className="size-9">
-                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-xs font-semibold text-white">
+                        <AvatarFallback className="bg-gradient-to-br from-[#9db9a6] to-[#5f8371] text-xs font-semibold text-white">
                           {initials}
                         </AvatarFallback>
                       </Avatar>

@@ -17,12 +17,12 @@ export const SERVICE_PRESETS: ServicePreset[] = [
 ];
 
 const FALLBACK_GRADIENTS = [
-  "from-indigo-500 to-violet-500",
-  "from-emerald-500 to-teal-500",
-  "from-rose-500 to-orange-500",
-  "from-sky-500 to-blue-500",
-  "from-fuchsia-500 to-pink-500",
-  "from-amber-500 to-yellow-500",
+  "from-[#9db9a6] to-[#5f8371]",
+  "from-[#a3b8cc] to-[#7893ad]",
+  "from-[#d4a3a3] to-[#b07d7d]",
+  "from-[#d9c9a8] to-[#b3a179]",
+  "from-[#c0aecb] to-[#977fa8]",
+  "from-[#a2c4c1] to-[#6f9a96]",
 ];
 
 /** Abonelik adına uyan marka gradyanı; yoksa isme göre sabit bir renk. */

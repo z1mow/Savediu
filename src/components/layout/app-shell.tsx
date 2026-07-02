@@ -94,7 +94,7 @@ function UserMenu({ profile, email }: { profile: Profile | null; email: string }
       <DropdownMenuTrigger asChild>
         <button className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-accent/60">
           <Avatar className="size-9">
-            <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-xs font-semibold text-white">
+            <AvatarFallback className="bg-gradient-to-br from-[#9db9a6] to-[#5f8371] text-xs font-semibold text-white">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -137,7 +137,7 @@ export function AppShell({
     <div className="relative flex min-h-dvh w-full">
       <div
         aria-hidden
-        className="pointer-events-none fixed -top-48 right-0 -z-10 h-120 w-160 rounded-full bg-gradient-to-l from-indigo-500/10 via-violet-500/8 to-transparent blur-3xl"
+        className="pointer-events-none fixed -top-48 right-0 -z-10 h-120 w-160 rounded-full bg-gradient-to-l from-[#8fae9c]/15 via-[#d9c9a8]/10 to-transparent blur-3xl"
       />
 
       {/* Masaüstü kenar çubuğu */}

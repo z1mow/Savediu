@@ -119,8 +119,8 @@ export function TransactionsClient({
                         className={cn(
                           "flex size-9 shrink-0 items-center justify-center rounded-xl",
                           t.type === "income"
-                            ? "bg-emerald-500/10 text-emerald-500"
-                            : "bg-rose-500/10 text-rose-500"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                            : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
                         )}
                       >
                         {t.type === "income" ? (
@@ -149,7 +149,7 @@ export function TransactionsClient({
                   <TableCell
                     className={cn(
                       "text-right tabular-nums font-semibold",
-                      t.type === "income" ? "text-emerald-500" : "text-rose-500"
+                      t.type === "income" ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
                     )}
                   >
                     {t.type === "income" ? "+" : "−"}

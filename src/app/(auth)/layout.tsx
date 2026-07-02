@@ -10,7 +10,7 @@ export default function AuthLayout({
     <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-4 py-10">
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-100 w-175 -translate-x-1/2 rounded-full bg-gradient-to-r from-indigo-500/20 via-violet-500/15 to-fuchsia-500/20 blur-3xl"
+        className="pointer-events-none absolute -top-32 left-1/2 h-100 w-175 -translate-x-1/2 rounded-full bg-gradient-to-r from-[#8fae9c]/25 via-[#b9cdc0]/15 to-[#d9c9a8]/25 blur-3xl"
       />
       <Link href="/" className="relative z-10 mb-8">
         <Logo />

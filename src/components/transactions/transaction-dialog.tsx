@@ -112,8 +112,8 @@ export function TransactionDialog({ categories }: { categories: Category[] }) {
                 "rounded-xl py-2 text-sm font-medium transition-all",
                 type === value
                   ? value === "income"
-                    ? "bg-background shadow-sm text-emerald-500"
-                    : "bg-background shadow-sm text-rose-500"
+                    ? "bg-background shadow-sm text-emerald-600 dark:text-emerald-400"
+                    : "bg-background shadow-sm text-rose-600 dark:text-rose-400"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >

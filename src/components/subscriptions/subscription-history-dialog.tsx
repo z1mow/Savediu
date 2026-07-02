@@ -82,7 +82,7 @@ function HistoryContent({ subscription }: { subscription: Subscription }) {
         {rows.map((r) => (
           <li key={r.id} className="flex items-center justify-between py-2.5 text-sm">
             <span className="text-muted-foreground">{formatDate(r.date)}</span>
-            <span className="tabular-nums font-medium text-rose-500">
+            <span className="tabular-nums font-medium text-rose-600 dark:text-rose-400">
               −{formatMoney(r.amount, r.currency)}
             </span>
           </li>

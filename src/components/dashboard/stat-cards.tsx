@@ -34,14 +34,14 @@ export function StatCards({ income, expense }: { income: number; expense: number
       title: "Bu Ay Gelir",
       value: income,
       icon: ArrowUpRight,
-      accent: "text-emerald-500",
+      accent: "text-emerald-600 dark:text-emerald-400",
       iconBg: "bg-emerald-500/10",
     },
     {
       title: "Bu Ay Gider",
       value: expense,
       icon: ArrowDownRight,
-      accent: "text-rose-500",
+      accent: "text-rose-600 dark:text-rose-400",
       iconBg: "bg-rose-500/10",
     },
     {
@@ -49,7 +49,7 @@ export function StatCards({ income, expense }: { income: number; expense: number
       value: Math.abs(net),
       prefix: net < 0 ? "−" : "",
       icon: Scale,
-      accent: net >= 0 ? "text-primary" : "text-rose-500",
+      accent: net >= 0 ? "text-primary" : "text-rose-600 dark:text-rose-400",
       iconBg: "bg-primary/10",
     },
   ];

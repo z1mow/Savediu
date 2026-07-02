@@ -50,7 +50,7 @@ export default function LandingPage() {
       {/* Arka plan ışıltısı */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 h-130 w-200 -translate-x-1/2 rounded-full bg-gradient-to-r from-indigo-500/20 via-violet-500/15 to-fuchsia-500/20 blur-3xl"
+        className="pointer-events-none absolute -top-40 left-1/2 h-130 w-200 -translate-x-1/2 rounded-full bg-gradient-to-r from-[#8fae9c]/25 via-[#b9cdc0]/15 to-[#d9c9a8]/25 blur-3xl"
       />
 
       <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
@@ -81,7 +81,7 @@ export default function LandingPage() {
           className="mt-6 max-w-3xl text-5xl font-semibold tracking-tight text-balance sm:text-6xl"
         >
           Paranızın nereye gittiğini{" "}
-          <span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#5f8371] via-[#7e997f] to-[#b3a179] bg-clip-text text-transparent">
             zarafetle
           </span>{" "}
           takip edin

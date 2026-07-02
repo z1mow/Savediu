@@ -60,7 +60,7 @@ export function RegisterForm() {
   if (awaitingConfirm) {
     return (
       <div className="text-center">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
           <MailCheck className="size-7" />
         </span>
         <h1 className="mt-5 text-2xl font-semibold tracking-tight">
