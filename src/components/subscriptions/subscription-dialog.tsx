@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { format } from "date-fns";
 import { Loader2, Pencil, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -23,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/date-picker";
 import { createClient } from "@/lib/supabase/client";
 import {
   BILLING_PERIODS,
@@ -218,14 +218,12 @@ function SubscriptionForm({
           </div>
           <div className="space-y-2">
             <Label htmlFor="sub-date">Sonraki Yenileme</Label>
-            <Input
+            <DatePicker
               id="sub-date"
-              type="date"
               value={nextDate}
-              onChange={(e) => setNextDate(e.target.value)}
-              min={format(new Date(), "yyyy-MM-dd")}
-              required
-              className="h-10 rounded-xl"
+              onChange={setNextDate}
+              fromDate={new Date()}
+              placeholder="Tarih seçin"
             />
           </div>
         </div>
@@ -270,9 +268,11 @@ function SubscriptionForm({
 export function SubscriptionDialog({
   categories,
   subscription,
+  triggerVariant = "default",
 }: {
   categories: Category[];
   subscription?: Subscription; // verilirse düzenleme modu
+  triggerVariant?: "default" | "outline";
 }) {
   const [open, setOpen] = useState(false);
   const isEdit = Boolean(subscription);
@@ -289,6 +289,10 @@ export function SubscriptionDialog({
             className="size-8 rounded-lg text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
           >
             <Pencil className="size-4" />
+          </Button>
+        ) : triggerVariant === "outline" ? (
+          <Button variant="outline" className="rounded-full">
+            <Plus className="size-4" /> Yeni Abonelik
           </Button>
         ) : (
           <Button className="rounded-full shadow-lg shadow-primary/25">

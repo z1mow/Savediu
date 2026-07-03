@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { History, Loader2, Receipt } from "lucide-react";
+import { History, Loader2, Receipt, TrendingUp } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { createClient } from "@/lib/supabase/client";
 import { formatDate, formatMoney } from "@/lib/format";
-import type { Subscription } from "@/lib/types";
+import type { Subscription, SubscriptionPriceChange } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface HistoryRow {
   id: string;
@@ -92,11 +93,55 @@ function HistoryContent({ subscription }: { subscription: Subscription }) {
   );
 }
 
+function PriceChangeList({ changes }: { changes: SubscriptionPriceChange[] }) {
+  if (changes.length === 0) return null;
+
+  return (
+    <div>
+      <p className="mb-2 flex items-center gap-1.5 text-sm font-medium">
+        <TrendingUp className="size-4 text-primary" /> Fiyat Geçmişi
+      </p>
+      <ul className="space-y-1.5">
+        {[...changes].reverse().map((c, i) => {
+          const pct =
+            c.old_amount > 0
+              ? Math.round(((c.new_amount - c.old_amount) / c.old_amount) * 100)
+              : 0;
+          return (
+            <li
+              key={`${c.changed_at}-${i}`}
+              className="flex items-center justify-between rounded-xl bg-muted/50 px-3 py-2 text-sm"
+            >
+              <span className="text-muted-foreground">{formatDate(c.changed_at)}</span>
+              <span className="tabular-nums">
+                {formatMoney(c.old_amount, c.currency)} →{" "}
+                <span className="font-medium">{formatMoney(c.new_amount, c.currency)}</span>{" "}
+                <span
+                  className={cn(
+                    "text-xs font-medium",
+                    pct > 0
+                      ? "text-rose-600 dark:text-rose-400"
+                      : "text-emerald-600 dark:text-emerald-400"
+                  )}
+                >
+                  ({pct > 0 ? "+" : ""}%{pct})
+                </span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 export function SubscriptionHistoryDialog({
   subscription,
+  priceChanges,
   onClose,
 }: {
   subscription: Subscription | null;
+  priceChanges: SubscriptionPriceChange[];
   onClose: () => void;
 }) {
   return (
@@ -105,14 +150,17 @@ export function SubscriptionHistoryDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <History className="size-5 text-primary" />
-            {subscription?.name} · Ödeme Geçmişi
+            {subscription?.name} · Geçmiş
           </DialogTitle>
           <DialogDescription>
-            Bu aboneliğin otomatik işlenen ödemeleri.
+            Otomatik işlenen ödemeler ve fiyat değişiklikleri.
           </DialogDescription>
         </DialogHeader>
         {subscription && (
-          <HistoryContent key={subscription.id} subscription={subscription} />
+          <>
+            <PriceChangeList changes={priceChanges} />
+            <HistoryContent key={subscription.id} subscription={subscription} />
+          </>
         )}
       </DialogContent>
     </Dialog>

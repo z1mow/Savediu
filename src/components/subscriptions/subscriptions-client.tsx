@@ -11,11 +11,14 @@ import {
   CreditCard,
   Repeat,
   Trash2,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { CategoryDonut } from "@/components/dashboard/category-donut";
+import { CategoryManager } from "@/components/categories/category-manager";
 import { createClient } from "@/lib/supabase/client";
 import { formatDate, formatMoney } from "@/lib/format";
 import {
@@ -25,8 +28,10 @@ import {
   type Category,
   type ExchangeRate,
   type Subscription,
+  type SubscriptionPriceChange,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { SubscriptionCalendar } from "./subscription-calendar";
 import { SubscriptionDialog } from "./subscription-dialog";
 import { SubscriptionHistoryDialog } from "./subscription-history-dialog";
 import { gradientFor } from "./service-presets";
@@ -72,16 +77,48 @@ export function SubscriptionsClient({
   subscriptions,
   categories,
   rates,
+  priceHistory,
 }: {
   subscriptions: Subscription[];
   categories: Category[];
   rates: Pick<ExchangeRate, "code" | "rate_to_try">[];
+  priceHistory: SubscriptionPriceChange[];
 }) {
   const router = useRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
   const [historySub, setHistorySub] = useState<Subscription | null>(null);
 
   const active = subscriptions.filter((s) => s.is_active);
+
+  // Abonelik başına zam yüzdesi (ilk kayıtlı fiyattan bugüne, aynı para birimi)
+  const increaseBySub = new Map<string, number>();
+  for (const sub of subscriptions) {
+    const changes = priceHistory.filter(
+      (h) => h.subscription_id === sub.id && h.currency === sub.currency
+    );
+    if (changes.length === 0) continue;
+    const baseline = changes[0].old_amount;
+    if (baseline > 0) {
+      const pct = Math.round(((sub.amount - baseline) / baseline) * 100);
+      if (pct !== 0) increaseBySub.set(sub.id, pct);
+    }
+  }
+
+  // Kategori bazlı aylık yük dağılımı (₺, normalize)
+  const categoryLoad = new Map<string, { name: string; color: string | null; value: number }>();
+  for (const sub of active) {
+    const cat = categories.find((c) => c.id === sub.category_id);
+    const name = cat?.name ?? "Kategorisiz";
+    const entry = categoryLoad.get(name) ?? {
+      name,
+      color: cat?.color ?? null,
+      value: 0,
+    };
+    entry.value +=
+      toTRY(sub.amount, sub.currency, rates) * periodInfo(sub.billing_period).perMonth;
+    categoryLoad.set(name, entry);
+  }
+  const categoryData = [...categoryLoad.values()].sort((a, b) => b.value - a.value);
 
   // Aylık normalize yük ve yıllık projeksiyon (hepsi ₺)
   const monthlyLoad = active.reduce(
@@ -154,7 +191,10 @@ export function SubscriptionsClient({
             Sabit giderleriniz — günü gelince otomatik işlenir.
           </p>
         </div>
-        <SubscriptionDialog categories={categories} />
+        <div className="flex items-center gap-2">
+          <CategoryManager categories={categories} />
+          <SubscriptionDialog categories={categories} />
+        </div>
       </div>
 
       {/* Aylık yük + yıllık projeksiyon */}
@@ -236,6 +276,14 @@ export function SubscriptionsClient({
         </motion.div>
       )}
 
+      {/* Takvim + kategori dağılımı */}
+      {active.length > 0 && (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <SubscriptionCalendar subscriptions={subscriptions} />
+          <CategoryDonut data={categoryData} />
+        </div>
+      )}
+
       {/* Abonelik kartları */}
       {subscriptions.length === 0 ? (
         <div className="glass flex h-52 flex-col items-center justify-center gap-3 rounded-3xl text-sm text-muted-foreground">
@@ -299,6 +347,22 @@ export function SubscriptionsClient({
                       {info.label}
                     </Badge>
                   )}
+                  {increaseBySub.has(sub.id) && (
+                    <Badge
+                      variant="secondary"
+                      title="İlk kayıtlı fiyata göre değişim"
+                      className={cn(
+                        "rounded-full text-[11px]",
+                        (increaseBySub.get(sub.id) ?? 0) > 0
+                          ? "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+                          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                      )}
+                    >
+                      <TrendingUp className="size-3" />
+                      {(increaseBySub.get(sub.id) ?? 0) > 0 ? "+" : ""}
+                      %{increaseBySub.get(sub.id)}
+                    </Badge>
+                  )}
                 </div>
                 <p className="mt-0.5 text-2xl font-semibold tabular-nums">
                   {formatMoney(sub.amount, sub.currency)}
@@ -333,6 +397,11 @@ export function SubscriptionsClient({
 
       <SubscriptionHistoryDialog
         subscription={historySub}
+        priceChanges={
+          historySub
+            ? priceHistory.filter((h) => h.subscription_id === historySub.id)
+            : []
+        }
         onClose={() => setHistorySub(null)}
       />
     </div>

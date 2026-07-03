@@ -72,6 +72,14 @@ export interface Transaction {
   created_at: string;
 }
 
+export interface SubscriptionPriceChange {
+  subscription_id: string;
+  old_amount: number;
+  new_amount: number;
+  currency: string;
+  changed_at: string;
+}
+
 export interface ExchangeRate {
   code: Currency;
   rate_to_try: number;

@@ -5,8 +5,10 @@ import { StatCards } from "@/components/dashboard/stat-cards";
 import { TrendChart } from "@/components/dashboard/trend-chart";
 import { CategoryDonut } from "@/components/dashboard/category-donut";
 import { RecentTransactions } from "@/components/dashboard/recent-transactions";
+import { SubscriptionDialog } from "@/components/subscriptions/subscription-dialog";
+import { TransactionDialog } from "@/components/transactions/transaction-dialog";
 import { createClient } from "@/lib/supabase/server";
-import { toTRY, type ExchangeRate } from "@/lib/types";
+import { toTRY, type Category, type ExchangeRate } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Panel" };
 
@@ -29,7 +31,7 @@ export default async function DashboardPage() {
 
   const since = format(startOfMonth(subMonths(new Date(), 5)), "yyyy-MM-dd");
 
-  const [{ data: txData }, { data: ratesData }, { data: profileData }] =
+  const [{ data: txData }, { data: ratesData }, { data: profileData }, { data: catData }] =
     await Promise.all([
       supabase
         .from("transactions")
@@ -38,7 +40,10 @@ export default async function DashboardPage() {
         .order("date", { ascending: false }),
       supabase.from("exchange_rates").select("code, rate_to_try"),
       supabase.from("profiles").select("full_name").eq("id", user!.id).single(),
+      supabase.from("categories").select("*").order("name"),
     ]);
+
+  const categories = (catData ?? []) as Category[];
 
   const transactions = (txData ?? []) as unknown as TxRow[];
   const rates = (ratesData ?? []) as Pick<ExchangeRate, "code" | "rate_to_try">[];
@@ -106,13 +111,22 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {firstName ? `Merhaba, ${firstName} 👋` : "Merhaba 👋"}
-        </h1>
-        <p className="mt-1 text-muted-foreground">
-          {monthLabel} finansal özetiniz hazır.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {firstName ? `Merhaba, ${firstName} 👋` : "Merhaba 👋"}
+          </h1>
+          <p className="mt-1 text-muted-foreground">
+            {monthLabel} finansal özetiniz hazır.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <SubscriptionDialog
+            categories={categories.filter((c) => c.type === "expense")}
+            triggerVariant="outline"
+          />
+          <TransactionDialog categories={categories} />
+        </div>
       </div>
 
       <StatCards income={income} expense={expense} />
