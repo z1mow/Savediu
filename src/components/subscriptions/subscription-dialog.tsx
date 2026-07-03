@@ -59,7 +59,7 @@ function SubscriptionForm({
   const [period, setPeriod] = useState<BillingPeriod>(
     subscription?.billing_period ?? "monthly"
   );
-  const [nextDate, setNextDate] = useState(subscription?.next_billing_on ?? "");
+  const [startDate, setStartDate] = useState(subscription?.next_billing_on ?? "");
   const [categoryId, setCategoryId] = useState(subscription?.category_id ?? "");
 
   function applyPreset(presetName: string) {
@@ -81,8 +81,8 @@ function SubscriptionForm({
       toast.error("Geçerli bir tutar girin");
       return;
     }
-    if (!nextDate) {
-      toast.error("Sonraki yenileme tarihini seçin");
+    if (!startDate) {
+      toast.error(isEdit ? "Sonraki yenileme tarihini seçin" : "İlk ödeme tarihini seçin");
       return;
     }
 
@@ -94,35 +94,58 @@ function SubscriptionForm({
       amount: parsedAmount,
       currency,
       billing_period: period,
-      next_billing_on: nextDate,
+      next_billing_on: startDate,
       // aylıkta güne sadık kalmak için gün bilgisi saklanır
-      billing_day: period === "monthly" ? new Date(nextDate).getDate() : null,
+      billing_day: period === "monthly" ? new Date(startDate).getDate() : null,
       category_id: categoryId || null,
     };
 
-    let error;
     if (isEdit) {
-      ({ error } = await supabase
+      const { error } = await supabase
         .from("subscriptions")
         .update(payload)
-        .eq("id", subscription!.id));
-    } else {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      ({ error } = await supabase
-        .from("subscriptions")
-        .insert({ ...payload, user_id: user!.id }));
-    }
+        .eq("id", subscription!.id);
+      setLoading(false);
 
-    setLoading(false);
-
-    if (error) {
-      toast.error(isEdit ? "Abonelik güncellenemedi" : "Abonelik eklenemedi");
+      if (error) {
+        toast.error("Abonelik güncellenemedi");
+        return;
+      }
+      toast.success("Abonelik güncellendi");
+      onDone();
+      router.refresh();
       return;
     }
 
-    toast.success(isEdit ? "Abonelik güncellendi" : "Abonelik eklendi ✨");
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const { data: created, error } = await supabase
+      .from("subscriptions")
+      .insert({ ...payload, user_id: user!.id })
+      .select("id")
+      .single();
+
+    if (error) {
+      setLoading(false);
+      toast.error("Abonelik eklenemedi");
+      return;
+    }
+
+    // Başlangıç tarihi geçmişteyse, aradaki dönemleri ödeme geçmişine işle
+    const { error: catchUpError } = await supabase.rpc("catch_up_subscription", {
+      p_subscription_id: created.id,
+    });
+    setLoading(false);
+
+    if (catchUpError) {
+      toast.error("Abonelik eklendi ama geçmiş ödemeler işlenemedi");
+      onDone();
+      router.refresh();
+      return;
+    }
+
+    toast.success("Abonelik eklendi ✨");
     onDone();
     router.refresh();
   }
@@ -217,14 +240,21 @@ function SubscriptionForm({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="sub-date">Sonraki Yenileme</Label>
+            <Label htmlFor="sub-date">
+              {isEdit ? "Sonraki Yenileme" : "İlk Ödeme Tarihi"}
+            </Label>
             <DatePicker
               id="sub-date"
-              value={nextDate}
-              onChange={setNextDate}
-              fromDate={new Date()}
+              value={startDate}
+              onChange={setStartDate}
+              fromDate={isEdit ? new Date() : undefined}
               placeholder="Tarih seçin"
             />
+            {!isEdit && (
+              <p className="text-xs text-muted-foreground">
+                Geçmiş bir tarih seçerseniz aradaki ödemeler otomatik işlenir.
+              </p>
+            )}
           </div>
         </div>
 
