@@ -74,7 +74,7 @@ function StatGrid({ stats }: { stats: Stats }) {
       title: "Toplam İşlem",
       value: new Intl.NumberFormat("tr-TR").format(stats.totalTransactions),
       icon: ArrowLeftRight,
-      accent: "text-sky-500 bg-sky-500/10",
+      accent: "text-foreground bg-muted",
     },
     {
       title: "Toplam Hacim (₺)",
@@ -83,13 +83,13 @@ function StatGrid({ stats }: { stats: Stats }) {
         maximumFractionDigits: 1,
       }).format(stats.totalVolume),
       icon: BadgeDollarSign,
-      accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
+      accent: "text-foreground bg-muted",
     },
     {
       title: "Aktif Abonelik",
       value: new Intl.NumberFormat("tr-TR").format(stats.activeSubscriptions),
       icon: Repeat,
-      accent: "text-violet-500 bg-violet-500/10",
+      accent: "text-foreground bg-muted",
     },
   ];
 
@@ -183,7 +183,7 @@ function UsersTable({
                   <TableCell className="pl-6">
                     <div className="flex items-center gap-3">
                       <Avatar className="size-9">
-                        <AvatarFallback className="bg-gradient-to-br from-[#9db9a6] to-[#5f8371] text-xs font-semibold text-white">
+                        <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
                           {initials}
                         </AvatarFallback>
                       </Avatar>

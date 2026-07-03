@@ -50,7 +50,7 @@ export default function LandingPage() {
       {/* Arka plan ışıltısı */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 h-130 w-200 -translate-x-1/2 rounded-full bg-gradient-to-r from-[#8fae9c]/25 via-[#b9cdc0]/15 to-[#d9c9a8]/25 blur-3xl"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(50%_40%_at_50%_0%,var(--color-muted)_0%,transparent_70%)]"
       />
 
       <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
@@ -68,7 +68,7 @@ export default function LandingPage() {
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center px-6 pt-20 pb-24 text-center">
         <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0}>
           <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted-foreground">
-            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="size-1.5 rounded-full bg-foreground animate-pulse" />
             Kişisel finansın yeni adresi
           </span>
         </motion.div>
@@ -80,10 +80,7 @@ export default function LandingPage() {
           custom={1}
           className="mt-6 max-w-3xl text-5xl font-semibold tracking-tight text-balance sm:text-6xl"
         >
-          Paranızın nereye gittiğini{" "}
-          <span className="bg-gradient-to-r from-[#5f8371] via-[#7e997f] to-[#b3a179] bg-clip-text text-transparent">
-            zarafetle
-          </span>{" "}
+          Paranızın nereye gittiğini <span className="italic">zarafetle</span>{" "}
           takip edin
         </motion.h1>
 
