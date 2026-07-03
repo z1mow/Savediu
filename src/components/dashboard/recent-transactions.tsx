@@ -31,18 +31,27 @@ export function RecentTransactions({ items }: { items: Item[] }) {
           <h2 className="font-medium">Son İşlemler</h2>
           <p className="text-sm text-muted-foreground">En güncel hareketleriniz</p>
         </div>
-        <Button variant="ghost" size="sm" asChild className="rounded-full">
-          <Link href="/transactions">
-            Tümü <ArrowRight className="size-4" />
-          </Link>
+        <Button
+          variant="ghost"
+          size="sm"
+          nativeButton={false}
+          className="rounded-full"
+          render={<Link href="/transactions" />}
+        >
+          Tümü <ArrowRight className="size-4" />
         </Button>
       </div>
 
       {items.length === 0 ? (
         <div className="flex h-32 flex-col items-center justify-center gap-3 text-sm text-muted-foreground">
           Henüz işlem yok
-          <Button size="sm" asChild className="rounded-full">
-            <Link href="/transactions">İlk işlemini ekle</Link>
+          <Button
+            size="sm"
+            nativeButton={false}
+            className="rounded-full"
+            render={<Link href="/transactions" />}
+          >
+            İlk işlemini ekle
           </Button>
         </div>
       ) : (

@@ -40,24 +40,26 @@ export function DatePicker({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          id={id}
-          type="button"
-          variant="outline"
-          disabled={disabled}
-          className={cn(
-            "h-10 w-full justify-start rounded-xl px-3 font-normal",
-            !selected && "text-muted-foreground",
-            className
-          )}
-        >
-          <CalendarIcon className="size-4 opacity-60" />
-          {selected
-            ? format(selected, "d MMMM yyyy, EEEE", { locale: tr })
-            : placeholder}
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <Button
+            id={id}
+            type="button"
+            variant="outline"
+            disabled={disabled}
+            className={cn(
+              "h-10 w-full justify-start rounded-xl px-3 font-normal",
+              !selected && "text-muted-foreground",
+              className
+            )}
+          >
+            <CalendarIcon className="size-4 opacity-60" />
+            {selected
+              ? format(selected, "d MMMM yyyy, EEEE", { locale: tr })
+              : placeholder}
+          </Button>
+        }
+      />
       <PopoverContent align="start" className="w-auto rounded-2xl p-2">
         <Calendar
           mode="single"

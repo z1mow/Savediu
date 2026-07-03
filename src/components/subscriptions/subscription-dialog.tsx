@@ -205,7 +205,7 @@ function SubscriptionForm({
           </div>
           <div className="col-span-2 space-y-2">
             <Label>Para Birimi</Label>
-            <Select value={currency} onValueChange={setCurrency}>
+            <Select value={currency} onValueChange={(v) => setCurrency(v ?? "TRY")}>
               <SelectTrigger className="h-10 w-full rounded-xl">
                 <SelectValue />
               </SelectTrigger>
@@ -260,7 +260,7 @@ function SubscriptionForm({
 
         <div className="space-y-2">
           <Label>Kategori</Label>
-          <Select value={categoryId} onValueChange={setCategoryId}>
+          <Select value={categoryId} onValueChange={(v) => setCategoryId(v ?? "")}>
             <SelectTrigger className="h-10 w-full rounded-xl">
               <SelectValue placeholder="Kategori seçin" />
             </SelectTrigger>
@@ -309,27 +309,29 @@ export function SubscriptionDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {isEdit ? (
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Aboneliği düzenle"
-            onClick={(e) => e.stopPropagation()}
-            className="size-8 rounded-lg text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
-          >
-            <Pencil className="size-4" />
-          </Button>
-        ) : triggerVariant === "outline" ? (
-          <Button variant="outline" className="rounded-full">
-            <Plus className="size-4" /> Yeni Abonelik
-          </Button>
-        ) : (
-          <Button className="rounded-full shadow-lg shadow-primary/25">
-            <Plus className="size-4" /> Yeni Abonelik
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          isEdit ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Aboneliği düzenle"
+              onClick={(e) => e.stopPropagation()}
+              className="size-8 rounded-lg text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
+            >
+              <Pencil className="size-4" />
+            </Button>
+          ) : triggerVariant === "outline" ? (
+            <Button variant="outline" className="rounded-full">
+              <Plus className="size-4" /> Yeni Abonelik
+            </Button>
+          ) : (
+            <Button className="rounded-full shadow-lg shadow-primary/25">
+              <Plus className="size-4" /> Yeni Abonelik
+            </Button>
+          )
+        }
+      />
       <DialogContent
         className="rounded-3xl sm:max-w-md"
         onClick={(e) => e.stopPropagation()}

@@ -56,11 +56,15 @@ export default function LandingPage() {
       <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
         <Logo />
         <nav className="flex items-center gap-2">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Giriş Yap</Link>
+          <Button variant="ghost" nativeButton={false} render={<Link href="/login" />}>
+            Giriş Yap
           </Button>
-          <Button asChild className="rounded-full px-5">
-            <Link href="/register">Kayıt Ol</Link>
+          <Button
+            className="rounded-full px-5"
+            nativeButton={false}
+            render={<Link href="/register" />}
+          >
+            Kayıt Ol
           </Button>
         </nav>
       </header>
@@ -103,13 +107,22 @@ export default function LandingPage() {
           custom={3}
           className="mt-10 flex items-center gap-3"
         >
-          <Button size="lg" asChild className="rounded-full px-7 shadow-lg shadow-primary/25">
-            <Link href="/register">
-              Ücretsiz Başla <ArrowRight className="size-4" />
-            </Link>
+          <Button
+            size="lg"
+            nativeButton={false}
+            className="rounded-full px-7 shadow-lg shadow-primary/25"
+            render={<Link href="/register" />}
+          >
+            Ücretsiz Başla <ArrowRight className="size-4" />
           </Button>
-          <Button size="lg" variant="outline" asChild className="rounded-full px-7">
-            <Link href="/login">Giriş Yap</Link>
+          <Button
+            size="lg"
+            variant="outline"
+            nativeButton={false}
+            className="rounded-full px-7"
+            render={<Link href="/login" />}
+          >
+            Giriş Yap
           </Button>
         </motion.div>
 

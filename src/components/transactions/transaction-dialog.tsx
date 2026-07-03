@@ -171,7 +171,7 @@ function TransactionForm({
           </div>
           <div className="col-span-2 space-y-2">
             <Label>Para Birimi</Label>
-            <Select value={currency} onValueChange={setCurrency}>
+            <Select value={currency} onValueChange={(v) => setCurrency(v ?? "TRY")}>
               <SelectTrigger className="h-10 w-full rounded-xl">
                 <SelectValue />
               </SelectTrigger>
@@ -188,7 +188,7 @@ function TransactionForm({
 
         <div className="space-y-2">
           <Label>Kategori</Label>
-          <Select value={categoryId} onValueChange={setCategoryId}>
+          <Select value={categoryId} onValueChange={(v) => setCategoryId(v ?? "")}>
             <SelectTrigger className="h-10 w-full rounded-xl">
               <SelectValue placeholder="Kategori seçin" />
             </SelectTrigger>
@@ -251,22 +251,24 @@ export function TransactionDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {isEdit ? (
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="İşlemi düzenle"
-            className="size-8 rounded-lg text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
-          >
-            <Pencil className="size-4" />
-          </Button>
-        ) : (
-          <Button className="rounded-full shadow-lg shadow-primary/25">
-            <Plus className="size-4" /> Yeni İşlem
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          isEdit ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="İşlemi düzenle"
+              className="size-8 rounded-lg text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
+            >
+              <Pencil className="size-4" />
+            </Button>
+          ) : (
+            <Button className="rounded-full shadow-lg shadow-primary/25">
+              <Plus className="size-4" /> Yeni İşlem
+            </Button>
+          )
+        }
+      />
       <DialogContent className="rounded-3xl sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{isEdit ? "İşlemi Düzenle" : "Yeni İşlem"}</DialogTitle>
