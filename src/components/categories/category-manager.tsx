@@ -250,11 +250,13 @@ export function CategoryManager({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="rounded-full">
-          <Tags className="size-4" /> Kategoriler
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button variant="outline" className="rounded-full">
+            <Tags className="size-4" /> Kategoriler
+          </Button>
+        }
+      />
       <DialogContent className="rounded-3xl sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Kategoriler</DialogTitle>

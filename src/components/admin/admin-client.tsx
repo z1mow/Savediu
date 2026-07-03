@@ -220,21 +220,23 @@ function UsersTable({
                   <TableCell>
                     {u.id !== currentUserId && (
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-8 rounded-lg"
-                            disabled={busyId === u.id}
-                            aria-label="Kullanıcı işlemleri"
-                          >
-                            {busyId === u.id ? (
-                              <Loader2 className="size-4 animate-spin" />
-                            ) : (
-                              <MoreHorizontal className="size-4" />
-                            )}
-                          </Button>
-                        </DropdownMenuTrigger>
+                        <DropdownMenuTrigger
+                          render={
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-8 rounded-lg"
+                              disabled={busyId === u.id}
+                              aria-label="Kullanıcı işlemleri"
+                            >
+                              {busyId === u.id ? (
+                                <Loader2 className="size-4 animate-spin" />
+                              ) : (
+                                <MoreHorizontal className="size-4" />
+                              )}
+                            </Button>
+                          }
+                        />
                         <DropdownMenuContent align="end" className="rounded-xl">
                           {u.role === "admin" ? (
                             <DropdownMenuItem onClick={() => setRole(u.id, "user")}>

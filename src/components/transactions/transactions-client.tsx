@@ -266,7 +266,7 @@ export function TransactionsClient({
           </TabsList>
         </Tabs>
 
-        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+        <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v ?? "all")}>
           <SelectTrigger className="h-10 w-40 rounded-full">
             <SelectValue placeholder="Kategori" />
           </SelectTrigger>
@@ -286,7 +286,7 @@ export function TransactionsClient({
           </SelectContent>
         </Select>
 
-        <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
+        <Select value={currencyFilter} onValueChange={(v) => setCurrencyFilter(v ?? "all")}>
           <SelectTrigger className="h-10 w-28 rounded-full">
             <SelectValue placeholder="Döviz" />
           </SelectTrigger>

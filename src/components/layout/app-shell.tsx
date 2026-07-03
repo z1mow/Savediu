@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -91,27 +92,31 @@ function UserMenu({ profile, email }: { profile: Profile | null; email: string }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-accent/60">
-          <Avatar className="size-9">
-            <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-sm font-medium">
-              {profile?.full_name ?? "Kullanıcı"}
+      <DropdownMenuTrigger
+        render={
+          <button className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-accent/60">
+            <Avatar className="size-9">
+              <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium">
+                {profile?.full_name ?? "Kullanıcı"}
+              </span>
+              <span className="block truncate text-xs text-muted-foreground">
+                {email}
+              </span>
             </span>
-            <span className="block truncate text-xs text-muted-foreground">
-              {email}
-            </span>
-          </span>
-        </button>
-      </DropdownMenuTrigger>
+          </button>
+        }
+      />
       <DropdownMenuContent align="start" className="w-56 rounded-xl">
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          {profile?.role === "admin" ? "Yönetici hesabı" : "Hesap"}
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="text-xs text-muted-foreground">
+            {profile?.role === "admin" ? "Yönetici hesabı" : "Hesap"}
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={signOut}>
           <LogOut className="size-4" /> Çıkış Yap
@@ -160,11 +165,13 @@ export function AppShell({
         {/* Mobil üst çubuk */}
         <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/60 bg-background/70 px-4 py-3 backdrop-blur-xl lg:hidden">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Menü">
-                <Menu className="size-5" />
-              </Button>
-            </SheetTrigger>
+            <SheetTrigger
+              render={
+                <Button variant="ghost" size="icon" aria-label="Menü">
+                  <Menu className="size-5" />
+                </Button>
+              }
+            />
             <SheetContent side="left" className="w-72 px-4 py-6">
               <SheetTitle className="sr-only">Menü</SheetTitle>
               <Logo className="px-2" />
